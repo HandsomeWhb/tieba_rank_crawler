@@ -1,17 +1,25 @@
 import requests
+import urllib.parse
 from bs4 import BeautifulSoup
 from datetime import datetime
 import time
 import os
+
+
+
+#吧名
+text = "华南理工大学"
+# 文件路径
+path = ""
+
+
 now = datetime.now().strftime("%Y.%m.%d")
 file_name = f"{now} tieba_rank_data.txt"
-
-# 文件路径
-file_path = fr'{file_name}'
+file_path=path+fr'{file_name}'
+gbk_bytes = text.encode('gbk')
+url_encoded = urllib.parse.quote_from_bytes(gbk_bytes)
 #贴吧排行榜链接,必须&pn=结尾后面的数字删掉
-url = "https://tieba.baidu.com/f/like/furank?kw=%BB%AA%C4%CF%C0%ED%B9%A4%B4%F3%D1%A7&pn="
-
-
+url = f'https://tieba.baidu.com/f/like/furank?kw={url_encoded}&pn='
 session = requests.Session()
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.100 Safari/537.36",
@@ -20,7 +28,6 @@ headers = {
     "Accept-Encoding": "gzip, deflate, br",
     "Connection": "keep-alive"
 }
-
 existing_ranks = set()
 if os.path.exists(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
